@@ -1,6 +1,12 @@
 
+import main
 def finance():
-    user_input = input("Enter choice (Number):\n1. View this Month's Expenditures\n2. View this month's Fee's received\n3. Enter Expendtures\n4. Back to Menu")
+    user_input = input("""--------------------------------
+    1. View this Month's Expenditures
+    2. View this month's Fee's received
+    3. Enter Expendtures
+    4. Back to Menu
+    Enter choice (Number):""")
 
     if user_input == "1":
         print("Viewing this Month's Expenditures")
@@ -13,7 +19,7 @@ def finance():
         # enter_expenditures()
     elif user_input == "4":
         print("Getting back to menu...")
-        # main()
+        main()
     else:
         print("Invalid choice. Please try again.")
 

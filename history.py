@@ -1,6 +1,10 @@
-
+import main
 def history():
-    user_input = input("Enter choice (Number):\n1.Student Data\n2.Employee Data\n3. Back to Menu\n:")
+    user_input = input("""--------------------------------
+    1.Student Data
+    2.Employee Data
+    3. Back to Menu
+    Enter choice (Number):""")
     
     if user_input == "1":
         print("Student Data")
@@ -10,7 +14,7 @@ def history():
         # fetch_employee_data()
     elif user_input == "3":
         print("Getting back to menu...")
-        # main()
+        main()
     else:
         print("Invalid choice. Please try again.")
 

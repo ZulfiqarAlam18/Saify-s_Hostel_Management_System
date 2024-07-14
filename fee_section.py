@@ -1,12 +1,14 @@
 
+import main
 def fee_section():
-    user_input = input("""Enter choice (Number)
-                       1. Fee Entry
-                       2. Unpiad students
-                       3. Paid students
-                       4. Unpaid employees
-                       5. paid employees
-                       6. Back to Menu\n""")
+    user_input = input("""--------------------------------
+    1. Fee Entry
+    2. Unpiad students
+    3. Paid students
+    4. Unpaid employees
+    5. paid employees
+    6. Back to Menu
+    Enter choice (Number):""")
     
     if user_input == "1":
         print("Fee Entry")
@@ -25,6 +27,7 @@ def fee_section():
         # paid_employees()
     elif user_input == "6":
         print("Back to Menu")
+        main()
     else:
         print("Invalid choice. Please try again.")
     

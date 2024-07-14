@@ -1,6 +1,11 @@
-
+import main
 def to_do_list():
-    user_input = input("Enter choice (Number):\n1. Add Task\n2. Remove Task\n3. View Tasks\n4. Back to Menu\n:")
+    user_input = input("""--------------------------------
+    1. Add Task
+    2. Remove Task
+    3. View Tasks
+    4. Back to Menu
+    Enter choice (Number):""")
     
     if user_input == "1":
         add_task()
@@ -10,12 +15,14 @@ def to_do_list():
         view_tasks()
     elif user_input == "4":
         print("Getting back to menu...")
-        # main()
+        main()
     else:
         print("Invalid choice. Please try again.")
     
 def add_task():
     task = input("Enter task: ")
+    date = input("Enter task date")
+    time = input("Enter task time")
     to_do_list.append(task)
     print(f"Task '{task}' added successfully.")
 

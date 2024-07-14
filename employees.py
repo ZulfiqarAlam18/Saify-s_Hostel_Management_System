@@ -1,11 +1,12 @@
-
+import main
 def employees():
-    user_input = input("""Enter choice (Number)
-                       1. Add employee
-                       2. Remove employee
-                       3. Update employee's data
-                       4. View List of employees
-                       5. Back to Menu\n""")
+    user_input = input("""--------------------------------
+    1. Add employee
+    2. Remove employee
+    3. Update employee's data
+    4. View List of employees
+    5. Back to Menu
+    Enter choice (Number):""")
     
     if user_input == "1":
         print("Adding employee")
@@ -46,10 +47,10 @@ def view_employees():
     # fetch_employees()
 def back_to_menu():
     print("Getting back to menu...")
-    # main()
+    main()
 
 
 
 
-employees()
+#employees()
 

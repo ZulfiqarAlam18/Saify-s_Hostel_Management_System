@@ -1,12 +1,13 @@
 import main
 
 def students():
-    user_input = input("""Enter choice (Number)
-                       1. Add student
-                       2. Remove student
-                       3. Update student's data
-                       4. View List of students
-                       5. Back to Menu\n""")
+    user_input = input("""--------------------------------
+    1. Add student
+    2. Remove student
+    3. Update student's data
+    4. View List of students
+    5. Back to Menu
+    Enter choice (Number):""")
     
     if user_input == "1":
         print("Adding student")
@@ -21,8 +22,7 @@ def students():
         print("Viewing List of students")
         view_students()
     elif user_input == "5":
-        print("Getting back to menu...")
-        back_to_menu()
+        main()
     else:
         print("Invalid choice. Please try again.")
 
@@ -47,12 +47,5 @@ def remove_student():
 def view_students():
     print("List of students")
     # fetch_students()
-def back_to_menu():
-    print("Getting back to menu...")
-    # main()
 
-
-
-
-#students()
 
