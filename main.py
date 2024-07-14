@@ -20,19 +20,19 @@ while True:
                 8. Exit\n\t:""")
     
     if user_input == "1":
-            fee_section()
+            fee_section.fee_section()
     elif user_input == "2":
-            students()
+            students.students()
     elif user_input == "3":
-            employees()
+            employees.employees()
     elif user_input == "4":
-            to_do_list()
+            to_do_list.to_do_list()
     elif user_input == "5":
-            finance()
+            finance.finance()
     elif user_input == "6":
-            history()
+            history.history()
     elif user_input == "7":
-            dashboard()
+            dashboard.dashboard()
     elif user_input == "8":
             break
     else:

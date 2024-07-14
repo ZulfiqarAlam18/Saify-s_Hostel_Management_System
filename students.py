@@ -1,4 +1,4 @@
-
+import main
 
 def students():
     user_input = input("""Enter choice (Number)
@@ -54,5 +54,5 @@ def back_to_menu():
 
 
 
-students()
+#students()
 
