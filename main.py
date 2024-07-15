@@ -3,7 +3,6 @@ import students
 import employees
 import dashboard
 import history
-import finance
 import to_do_list
 
 def main_menu():

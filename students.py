@@ -29,10 +29,10 @@ def students():
 
 def add_student():
     name = input("Name:")
-    f_name = input("Father Name:")
+    f_name = input("Father's Name:")
     phone_no = input("Phone Number:")
     cnic_no = input("Cnic Number:")
-    roll_no = input("Roll Number:")
+    room_no = input("Room Number:")
     Uni_name = input("University Name:")
     address = input("Address:")
     district = input("District:")
@@ -40,7 +40,7 @@ def add_student():
 
 def update_student_data():
     name = input("Enter student Name:")
-    data = input("Update What 1.Name:\n2.Phone Number\n3.Father Name:\n4.Cnic Number\n5.Address\n6.District\n7. Roll Number:\n8.UNi_Name")
+    data = input("Update What 1.Name:\n2.Phone Number\n3.Father Name:\n4.Cnic Number\n5.Address\n6.District\n7. Room Number:\n8.UNi_Name")
     print("Updated Successfully")
 def remove_student():
     name = input("Enter student Name:")

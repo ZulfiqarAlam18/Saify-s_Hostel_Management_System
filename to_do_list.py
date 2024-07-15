@@ -4,7 +4,7 @@ def to_do_list():
     1. Add Task
     2. Remove Task
     3. View Tasks
-    4. Back to Menu
+    4. Back to Main Menu
     Enter choice (Number):""")
     
     if user_input == "1":
@@ -20,23 +20,14 @@ def to_do_list():
         print("Invalid choice. Please try again.")
     
 def add_task():
-    task = input("Enter task: ")
-    date = input("Enter task date")
-    time = input("Enter task time")
-    #to_do_list.append(task)
+    id = input("Enter task ID(any number like 3344):")
+    task = input("Enter task Discription: ")
+    date = input("Date:")
+    time = input("Time:")
     print(f"Task '{task}' added successfully.")
 
 def remove_task():
-    task = input("Enter task to remove: ")
-    # if task in to_do_list:
-    #     to_do_list.remove(task)
-    #     print(f"Task '{task}' removed successfully.")
-    # else:
-    #     print(f"Task '{task}' not found in the list.")
-
+    id = input("Enter Task ID to remove: ")
+   
 def view_tasks():
     print("To-Do List:")
-#     for i, task in enumerate(to_do_list, start=1):
-#         print(f"{i}. {task}")
-
-# to_do_list = []
