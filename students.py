@@ -22,7 +22,8 @@ def students():
         print("Viewing List of students")
         view_students()
     elif user_input == "5":
-        main()
+        print("Getting back to menu...")
+        main.main()
     else:
         print("Invalid choice. Please try again.")
 

@@ -26,8 +26,8 @@ def fee_section():
         print("Paid employees")
         # paid_employees()
     elif user_input == "6":
-        print("Back to Menu")
-        main()
+        print("Getting back to menu...")
+        main.main()
     else:
         print("Invalid choice. Please try again.")
     

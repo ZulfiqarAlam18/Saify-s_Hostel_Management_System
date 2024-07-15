@@ -22,7 +22,7 @@ def employees():
         # view_employees()
     elif user_input == "5":
         print("Getting back to menu...")
-        #break
+        main.main()
     else:
         print("Invalid choice. Please try again.")
 

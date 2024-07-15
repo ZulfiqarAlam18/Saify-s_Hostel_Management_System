@@ -15,7 +15,7 @@ def to_do_list():
         view_tasks()
     elif user_input == "4":
         print("Getting back to menu...")
-        main()
+        main.main()
     else:
         print("Invalid choice. Please try again.")
     
@@ -23,20 +23,20 @@ def add_task():
     task = input("Enter task: ")
     date = input("Enter task date")
     time = input("Enter task time")
-    to_do_list.append(task)
+    #to_do_list.append(task)
     print(f"Task '{task}' added successfully.")
 
 def remove_task():
     task = input("Enter task to remove: ")
-    if task in to_do_list:
-        to_do_list.remove(task)
-        print(f"Task '{task}' removed successfully.")
-    else:
-        print(f"Task '{task}' not found in the list.")
+    # if task in to_do_list:
+    #     to_do_list.remove(task)
+    #     print(f"Task '{task}' removed successfully.")
+    # else:
+    #     print(f"Task '{task}' not found in the list.")
 
 def view_tasks():
     print("To-Do List:")
-    for i, task in enumerate(to_do_list, start=1):
-        print(f"{i}. {task}")
+#     for i, task in enumerate(to_do_list, start=1):
+#         print(f"{i}. {task}")
 
-to_do_list = []
+# to_do_list = []

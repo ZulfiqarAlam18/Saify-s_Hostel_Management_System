@@ -14,7 +14,7 @@ def history():
         # fetch_employee_data()
     elif user_input == "3":
         print("Getting back to menu...")
-        main()
+        main.main()
     else:
         print("Invalid choice. Please try again.")
 

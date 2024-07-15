@@ -19,7 +19,7 @@ def finance():
         # enter_expenditures()
     elif user_input == "4":
         print("Getting back to menu...")
-        main()
+        main.main()
     else:
         print("Invalid choice. Please try again.")
 
