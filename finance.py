@@ -1,6 +1,6 @@
 
 import main
-def fee_section():
+def finance():
     user_input = input("""--------------------------------
     1. Add Fee
     2. Add Employee Salary

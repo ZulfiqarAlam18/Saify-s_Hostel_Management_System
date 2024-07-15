@@ -1,4 +1,4 @@
-import fee_section
+import finance
 import students
 import employees
 import dashboard
@@ -9,14 +9,13 @@ import to_do_list
 def main_menu():
     return input("""--------------------------------
                    "Saif's Hostel Management System"
-    1. Fee Section
+    1. Finance
     2. Student Affairs
     3. Employees
     4. To Do List
-    5. Finance
-    6. History
-    7. Dashboard
-    8. Exit
+    5. History
+    6. Dashboard
+    7. Exit
     Enter choice (Number): """)
 
 def main():
@@ -25,7 +24,7 @@ def main():
             user_input = main_menu()
         
             if user_input == "1":
-                fee_section.fee_section()
+                finance.finance()
             elif user_input == "2":
                 students.students()
             elif user_input == "3":
@@ -33,12 +32,10 @@ def main():
             elif user_input == "4":
                 to_do_list.to_do_list()
             elif user_input == "5":
-                finance.finance()
-            elif user_input == "6":
                 history.history()
-            elif user_input == "7":
+            elif user_input == "6":
                 dashboard.dashboard()
-            elif user_input == "8":
+            elif user_input == "7":
                 print("Exiting the system. Goodbye!")
                 break
             else:
