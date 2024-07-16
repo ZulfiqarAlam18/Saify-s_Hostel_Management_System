@@ -28,40 +28,47 @@ def add_student():
         name = input("Name: ")
         f_name = input("Father's Name: ")
         phone_no = input("Phone Number: ")
-        cnic_no = input("Cnic Number: ")
+        cnic_no = input("CNIC Number: ")
         room_no = input("Room Number: ")
         uni_name = input("University Name: ")
         address = input("Address: ")
         district = input("District: ")
-
-        query = "INSERT INTO students (name, father_name, phone_no, cnic_no, room_no, university_name, address, district) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        db_helper.execute_query(query, (name, f_name, phone_no, cnic_no, room_no, uni_name, address, district))
         
-        print("Added Successfully")
+        query = """
+        INSERT INTO students (name, f_name, phone_no, cnic_no, room_no, uni_name, address, district)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """
+        params = (name, f_name, phone_no, cnic_no, room_no, uni_name, address, district)
+        db_helper.execute_query(query, params)
+        
+        print("Student added successfully.")
+        students()
     except Exception as e:
         print(f"Error: {e}")
 
 def update_student_data():
     try:
-        name = input("Enter student Name: ")
-        data = input("Update What (1.Name, 2.Phone Number, 3.Father Name, 4.Cnic Number, 5.Address, 6.District, 7.Room Number, 8.University Name): ")
-        new_value = input("Enter new value: ")
-
-        fields = {
+        student_id = input("Enter Student ID: ")
+        data_choice = input("Update What? (1.Name, 2.Phone Number, 3.Father's Name, 4.CNIC Number, 5.Address, 6.District, 7.Room Number, 8.University Name): ")
+        
+        column_map = {
             "1": "name",
             "2": "phone_no",
-            "3": "father_name",
+            "3": "f_name",
             "4": "cnic_no",
             "5": "address",
             "6": "district",
             "7": "room_no",
-            "8": "university_name"
+            "8": "uni_name"
         }
-
-        if data in fields:
-            query = f"UPDATE students SET {fields[data]} = ? WHERE name = ?"
-            db_helper.execute_query(query, (new_value, name))
-            print("Updated Successfully")
+        
+        if data_choice in column_map:
+            new_value = input(f"Enter new value for {column_map[data_choice]}: ")
+            query = f"UPDATE students SET {column_map[data_choice]} = ? WHERE id = ?"
+            params = (new_value, student_id)
+            db_helper.execute_query(query, params)
+            print("Student data updated successfully.")
+            students()
         else:
             print("Invalid choice.")
     except Exception as e:
@@ -69,18 +76,23 @@ def update_student_data():
 
 def remove_student():
     try:
-        name = input("Enter student Name: ")
-        query = "DELETE FROM students WHERE name = ?"
-        db_helper.execute_query(query, (name,))
-        print("Removed Successfully")
+        student_id = input("Enter Student ID to remove: ")
+        query = "DELETE FROM students WHERE id = ?"
+        params = (student_id,)
+        db_helper.execute_query(query, params)
+        print("Student removed successfully.")
+        students()
     except Exception as e:
         print(f"Error: {e}")
 
 def view_students():
     try:
         query = "SELECT * FROM students"
-        students = db_helper.fetch_query(query)
-        for student in students:
+        students_list = db_helper.fetch_query(query)
+        for student in students_list:
             print(student)
+        
+        print("--------------------------------")
+        students()
     except Exception as e:
         print(f"Error: {e}")

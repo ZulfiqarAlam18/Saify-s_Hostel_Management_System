@@ -7,7 +7,7 @@ def employees():
     2. Remove employee
     3. Update employee's data
     4. View List of employees
-    5. Back to Menu
+    5. Back to Main Menu
     Enter choice (Number):""")
     
     if user_input == "1":
@@ -36,6 +36,7 @@ def add_employee():
         db_helper.execute_query(query, (name, f_name, phone_no, cnic_no, address, district))
         
         print("Added Successfully")
+        employees()
     except Exception as e:
         print(f"Error: {e}")
 
@@ -58,6 +59,7 @@ def update_employee_data():
             query = f"UPDATE employees SET {fields[data]} = ? WHERE name = ?"
             db_helper.execute_query(query, (new_value, name))
             print("Updated Successfully")
+            employees()
         else:
             print("Invalid choice.")
     except Exception as e:
@@ -69,6 +71,7 @@ def remove_employee():
         query = "DELETE FROM employees WHERE name = ?"
         db_helper.execute_query(query, (name,))
         print("Removed Successfully")
+        employees()
     except Exception as e:
         print(f"Error: {e}")
 
@@ -78,5 +81,7 @@ def view_employees():
         employees = db_helper.fetch_query(query)
         for employee in employees:
             print(employee)
+            print("--------------------------------")
+            employees()
     except Exception as e:
         print(f"Error: {e}")

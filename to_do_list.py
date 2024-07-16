@@ -30,6 +30,8 @@ def add_task():
         db_helper.execute_query(query, (description, date, time))
 
         print(f"Task '{description}' added successfully.")
+
+        to_do_list()
     except Exception as e:
         print(f"Error: {e}")
 
@@ -39,6 +41,8 @@ def remove_task():
         query = "DELETE FROM tasks WHERE id = ?"
         db_helper.execute_query(query, (task_id,))
         print("Task removed successfully.")
+
+        to_do_list()
     except Exception as e:
         print(f"Error: {e}")
 
@@ -49,5 +53,8 @@ def view_tasks():
         print("To-Do List:")
         for task in tasks:
             print(task)
+        
+        print("--------------------------------")
+        to_do_list()
     except Exception as e:
         print(f"Error: {e}")

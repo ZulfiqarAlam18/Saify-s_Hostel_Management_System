@@ -26,6 +26,9 @@ def view_students_history():
         students = db_helper.fetch_query(query)
         for student in students:
             print(student)
+        
+        print("--------------------------------")
+        history()
     except Exception as e:
         print(f"Error: {e}")
 
@@ -35,6 +38,9 @@ def view_employees_history():
         employees = db_helper.fetch_query(query)
         for employee in employees:
             print(employee)
+        
+        print("--------------------------------")
+        history()
     except Exception as e:
         print(f"Error: {e}")
 
@@ -44,5 +50,8 @@ def view_finance_history():
         finance_records = db_helper.fetch_query(query)
         for record in finance_records:
             print(record)
+        
+        print("--------------------------------")
+        history()
     except Exception as e:
         print(f"Error: {e}")

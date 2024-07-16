@@ -2,7 +2,7 @@ import sqlite3
 
 def execute_query(query, params=()):
     try:
-        conn = sqlite3.connect('data/hostel_management.db')
+        conn = sqlite3.connect('database/hostel_management.db')
         cursor = conn.cursor()
         cursor.execute(query, params)
         conn.commit()
@@ -13,7 +13,7 @@ def execute_query(query, params=()):
 
 def fetch_query(query, params=()):
     try:
-        conn = sqlite3.connect('data/hostel_management.db')
+        conn = sqlite3.connect('database/hostel_management.db')
         cursor = conn.cursor()
         cursor.execute(query, params)
         results = cursor.fetchall()
