@@ -20,6 +20,23 @@ def plot_bar_chart(data, title, xlabel, ylabel, filename):
     plt.savefig(filename)
     plt.close()
 
+def plot_pie_chart(data, title, filename):
+    plt.figure(figsize=(10, 5))
+    data.plot(kind='pie', autopct='%1.1f%%')
+    plt.title(title)
+    plt.ylabel('')
+    plt.savefig(filename)
+    plt.close()
+
+def plot_line_chart(data, title, xlabel, ylabel, filename):
+    plt.figure(figsize=(10, 5))
+    data.plot(kind='line')
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.savefig(filename)
+    plt.close()
+
 def dashboard():
     try:
         print("Generating Insights...")
@@ -68,6 +85,11 @@ def dashboard():
         employee_attendance = fetch_query_result(query)
         employee_attendance_df = pd.DataFrame(employee_attendance, columns=['Employee ID', 'Days Present'])
 
+        # Employee performance
+        query = "SELECT employee_id, AVG(performance_rating) FROM performance_reviews GROUP BY employee_id"
+        employee_performance = fetch_query_result(query)
+        employee_performance_df = pd.DataFrame(employee_performance, columns=['Employee ID', 'Average Rating'])
+
         # Total tasks
         query = "SELECT COUNT(*) FROM tasks"
         total_tasks = fetch_query_result(query)[0][0]
@@ -76,6 +98,11 @@ def dashboard():
         query = "SELECT status, COUNT(*) FROM tasks GROUP BY status"
         tasks_summary = fetch_query_result(query)
         tasks_summary_df = pd.DataFrame(tasks_summary, columns=['Status', 'Count'])
+
+        # Task deadlines
+        query = "SELECT description, due_date FROM tasks WHERE due_date >= date('now') ORDER BY due_date ASC"
+        upcoming_deadlines = fetch_query_result(query)
+        upcoming_deadlines_df = pd.DataFrame(upcoming_deadlines, columns=['Description', 'Due Date'])
 
         # Maintenance logs
         query = "SELECT description, date FROM maintenance WHERE status='Completed'"
@@ -99,13 +126,19 @@ def dashboard():
         pending_maintenance_query = "SELECT description FROM maintenance WHERE status='Pending'"
         pending_maintenance_requests = fetch_query_result(pending_maintenance_query)
 
+        # User feedback
+        query = "SELECT feedback FROM user_feedback"
+        user_feedback = fetch_query_result(query)
+
         # Generating Reports
         admissions_df.to_csv('admissions_report.csv')
         departures_df.to_csv('departures_report.csv')
         room_occupancy_df.to_csv('room_occupancy_report.csv')
         salaries_summary_df.to_csv('salaries_report.csv')
         employee_attendance_df.to_csv('employee_attendance_report.csv')
+        employee_performance_df.to_csv('employee_performance_report.csv')
         tasks_summary_df.to_csv('tasks_report.csv')
+        upcoming_deadlines_df.to_csv('upcoming_deadlines_report.csv')
         finance_summary_df.to_csv('finance_report.csv')
 
         # Plotting Visual Representations
@@ -116,6 +149,7 @@ def dashboard():
         plot_bar_chart(employee_attendance_df.set_index('Employee ID'), 'Employee Attendance', 'Employee ID', 'Days Present', 'attendance_chart.png')
         plot_bar_chart(tasks_summary_df.set_index('Status'), 'Tasks Summary', 'Status', 'Count', 'tasks_chart.png')
         plot_bar_chart(finance_summary_df.set_index('Category'), 'Finance Summary', 'Category', 'Amount', 'finance_chart.png')
+        plot_pie_chart(finance_summary_df.set_index('Category'), 'Finance Distribution', 'finance_pie_chart.png')
 
         # Display Summary
         print(f"Total Students: {total_students}")
@@ -138,6 +172,10 @@ def dashboard():
         print("Pending Maintenance Requests:")
         for maintenance in pending_maintenance_requests:
             print(f"- {maintenance[0]}")
+
+        print("User Feedback:")
+        for feedback in user_feedback:
+            print(f"- {feedback[0]}")
 
         main.main()
     except Exception as e:
