@@ -1,5 +1,5 @@
 import main
-from db_helper import connect_db
+import db_helper
 
 def employees():
     user_input = input("""--------------------------------
@@ -24,72 +24,59 @@ def employees():
         print("Invalid choice. Please try again.")
 
 def add_employee():
-    name = input("Name:")
-    f_name = input("Father's Name:")
-    phone_no = input("Phone Number:")
-    cnic_no = input("CNIC Number:")
-    address = input("Address:")
-    district = input("District:")
-
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-        INSERT INTO employees (name, father_name, phone_no, cnic_no, address, district)
-        VALUES (?, ?, ?, ?, ?, ?)
-        ''', (name, f_name, phone_no, cnic_no, address, district))
-        conn.commit()
-        conn.close()
-        print("Employee added successfully.")
+        name = input("Name: ")
+        f_name = input("Father Name: ")
+        phone_no = input("Phone Number: ")
+        cnic_no = input("Cnic Number: ")
+        address = input("Address: ")
+        district = input("District: ")
+
+        query = "INSERT INTO employees (name, father_name, phone_no, cnic_no, address, district) VALUES (?, ?, ?, ?, ?, ?)"
+        db_helper.execute_query(query, (name, f_name, phone_no, cnic_no, address, district))
+        
+        print("Added Successfully")
     except Exception as e:
-        print("An error occurred while adding employee:", str(e))
+        print(f"Error: {e}")
 
 def update_employee_data():
-    employee_id = input("Enter Employee ID:")
-    column = input("Update Which Field (name, father_name, phone_no, cnic_no, address, district):")
-    new_value = input(f"Enter New Value for {column}:")
-
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute(f'''
-        UPDATE employees
-        SET {column} = ?
-        WHERE id = ?
-        ''', (new_value, employee_id))
-        conn.commit()
-        conn.close()
-        print("Employee data updated successfully.")
+        name = input("Enter Employee Name: ")
+        data = input("Update What (1.Name, 2.Phone Number, 3.Father Name, 4.Cnic Number, 5.Address, 6.District): ")
+        new_value = input("Enter new value: ")
+
+        fields = {
+            "1": "name",
+            "2": "phone_no",
+            "3": "father_name",
+            "4": "cnic_no",
+            "5": "address",
+            "6": "district"
+        }
+
+        if data in fields:
+            query = f"UPDATE employees SET {fields[data]} = ? WHERE name = ?"
+            db_helper.execute_query(query, (new_value, name))
+            print("Updated Successfully")
+        else:
+            print("Invalid choice.")
     except Exception as e:
-        print("An error occurred while updating employee data:", str(e))
+        print(f"Error: {e}")
 
 def remove_employee():
-    employee_id = input("Enter Employee ID to remove:")
-
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-        DELETE FROM employees WHERE id = ?
-        ''', (employee_id,))
-        conn.commit()
-        conn.close()
-        print("Employee removed successfully.")
+        name = input("Enter Employee Name: ")
+        query = "DELETE FROM employees WHERE name = ?"
+        db_helper.execute_query(query, (name,))
+        print("Removed Successfully")
     except Exception as e:
-        print("An error occurred while removing employee:", str(e))
+        print(f"Error: {e}")
 
 def view_employees():
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-        SELECT * FROM employees
-        ''')
-        employees = cursor.fetchall()
-        conn.close()
-
-        print("List of Employees:")
+        query = "SELECT * FROM employees"
+        employees = db_helper.fetch_query(query)
         for employee in employees:
             print(employee)
     except Exception as e:
-        print("An error occurred while fetching employees:", str(e))
+        print(f"Error: {e}")

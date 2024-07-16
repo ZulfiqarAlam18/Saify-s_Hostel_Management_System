@@ -1,5 +1,5 @@
 import main
-from db_helper import connect_db
+import db_helper
 
 def students():
     user_input = input("""--------------------------------
@@ -24,74 +24,63 @@ def students():
         print("Invalid choice. Please try again.")
 
 def add_student():
-    name = input("Name:")
-    f_name = input("Father's Name:")
-    phone_no = input("Phone Number:")
-    cnic_no = input("CNIC Number:")
-    room_no = input("Room Number:")
-    uni_name = input("University Name:")
-    address = input("Address:")
-    district = input("District:")
-
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-        INSERT INTO students (name, father_name, phone_no, cnic_no, room_no, uni_name, address, district)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (name, f_name, phone_no, cnic_no, room_no, uni_name, address, district))
-        conn.commit()
-        conn.close()
-        print("Student added successfully.")
+        name = input("Name: ")
+        f_name = input("Father's Name: ")
+        phone_no = input("Phone Number: ")
+        cnic_no = input("Cnic Number: ")
+        room_no = input("Room Number: ")
+        uni_name = input("University Name: ")
+        address = input("Address: ")
+        district = input("District: ")
+
+        query = "INSERT INTO students (name, father_name, phone_no, cnic_no, room_no, university_name, address, district) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        db_helper.execute_query(query, (name, f_name, phone_no, cnic_no, room_no, uni_name, address, district))
+        
+        print("Added Successfully")
     except Exception as e:
-        print("An error occurred while adding student:", str(e))
+        print(f"Error: {e}")
 
 def update_student_data():
-    student_id = input("Enter Student ID:")
-    column = input("Update Which Field (name, father_name, phone_no, cnic_no, room_no, uni_name, address, district):")
-    new_value = input(f"Enter New Value for {column}:")
-
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute(f'''
-        UPDATE students
-        SET {column} = ?
-        WHERE id = ?
-        ''', (new_value, student_id))
-        conn.commit()
-        conn.close()
-        print("Student data updated successfully.")
+        name = input("Enter student Name: ")
+        data = input("Update What (1.Name, 2.Phone Number, 3.Father Name, 4.Cnic Number, 5.Address, 6.District, 7.Room Number, 8.University Name): ")
+        new_value = input("Enter new value: ")
+
+        fields = {
+            "1": "name",
+            "2": "phone_no",
+            "3": "father_name",
+            "4": "cnic_no",
+            "5": "address",
+            "6": "district",
+            "7": "room_no",
+            "8": "university_name"
+        }
+
+        if data in fields:
+            query = f"UPDATE students SET {fields[data]} = ? WHERE name = ?"
+            db_helper.execute_query(query, (new_value, name))
+            print("Updated Successfully")
+        else:
+            print("Invalid choice.")
     except Exception as e:
-        print("An error occurred while updating student data:", str(e))
+        print(f"Error: {e}")
 
 def remove_student():
-    student_id = input("Enter Student ID to remove:")
-
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-        DELETE FROM students WHERE id = ?
-        ''', (student_id,))
-        conn.commit()
-        conn.close()
-        print("Student removed successfully.")
+        name = input("Enter student Name: ")
+        query = "DELETE FROM students WHERE name = ?"
+        db_helper.execute_query(query, (name,))
+        print("Removed Successfully")
     except Exception as e:
-        print("An error occurred while removing student:", str(e))
+        print(f"Error: {e}")
 
 def view_students():
     try:
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-        SELECT * FROM students
-        ''')
-        students = cursor.fetchall()
-        conn.close()
-
-        print("List of Students:")
+        query = "SELECT * FROM students"
+        students = db_helper.fetch_query(query)
         for student in students:
             print(student)
     except Exception as e:
-        print("An error occurred while fetching students:", str(e))
+        print(f"Error: {e}")
