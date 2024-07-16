@@ -1,4 +1,5 @@
 import main
+from db_helper import connect_db
 
 def students():
     user_input = input("""--------------------------------
@@ -10,19 +11,14 @@ def students():
     Enter choice (Number):""")
     
     if user_input == "1":
-        print("Adding student")
         add_student()
     elif user_input == "2":
-        print("Removing student")
         remove_student()
     elif user_input == "3":
-        print("Updating student's data")
         update_student_data()
     elif user_input == "4":
-        print("Viewing List of students")
         view_students()
     elif user_input == "5":
-        print("Getting back to menu...")
         main.main()
     else:
         print("Invalid choice. Please try again.")
@@ -31,22 +27,71 @@ def add_student():
     name = input("Name:")
     f_name = input("Father's Name:")
     phone_no = input("Phone Number:")
-    cnic_no = input("Cnic Number:")
+    cnic_no = input("CNIC Number:")
     room_no = input("Room Number:")
-    Uni_name = input("University Name:")
+    uni_name = input("University Name:")
     address = input("Address:")
     district = input("District:")
-    print("Added Successfully")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO students (name, father_name, phone_no, cnic_no, room_no, uni_name, address, district)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (name, f_name, phone_no, cnic_no, room_no, uni_name, address, district))
+        conn.commit()
+        conn.close()
+        print("Student added successfully.")
+    except Exception as e:
+        print("An error occurred while adding student:", str(e))
 
 def update_student_data():
-    name = input("Enter student Name:")
-    data = input("Update What 1.Name:\n2.Phone Number\n3.Father Name:\n4.Cnic Number\n5.Address\n6.District\n7. Room Number:\n8.UNi_Name")
-    print("Updated Successfully")
+    student_id = input("Enter Student ID:")
+    column = input("Update Which Field (name, father_name, phone_no, cnic_no, room_no, uni_name, address, district):")
+    new_value = input(f"Enter New Value for {column}:")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(f'''
+        UPDATE students
+        SET {column} = ?
+        WHERE id = ?
+        ''', (new_value, student_id))
+        conn.commit()
+        conn.close()
+        print("Student data updated successfully.")
+    except Exception as e:
+        print("An error occurred while updating student data:", str(e))
+
 def remove_student():
-    name = input("Enter student Name:")
-    print("Removed Successfully")
+    student_id = input("Enter Student ID to remove:")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        DELETE FROM students WHERE id = ?
+        ''', (student_id,))
+        conn.commit()
+        conn.close()
+        print("Student removed successfully.")
+    except Exception as e:
+        print("An error occurred while removing student:", str(e))
+
 def view_students():
-    print("List of students")
-    # fetch_students()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM students
+        ''')
+        students = cursor.fetchall()
+        conn.close()
 
-
+        print("List of Students:")
+        for student in students:
+            print(student)
+    except Exception as e:
+        print("An error occurred while fetching students:", str(e))

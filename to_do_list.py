@@ -1,10 +1,12 @@
 import main
+from db_helper import connect_db
+
 def to_do_list():
     user_input = input("""--------------------------------
     1. Add Task
     2. Remove Task
     3. View Tasks
-    4. Back to Main Menu
+    4. Back to Menu
     Enter choice (Number):""")
     
     if user_input == "1":
@@ -14,20 +16,56 @@ def to_do_list():
     elif user_input == "3":
         view_tasks()
     elif user_input == "4":
-        print("Getting back to menu...")
         main.main()
     else:
         print("Invalid choice. Please try again.")
-    
+
 def add_task():
-    id = input("Enter task ID(any number like 3344):")
-    task = input("Enter task Discription: ")
-    date = input("Date:")
-    time = input("Time:")
-    print(f"Task '{task}' added successfully.")
+    task_id = input("Enter Task ID:")
+    task_description = input("Enter Task Description:")
+    date = input("Enter Date (YYYY-MM-DD):")
+    time = input("Enter Time (HH:MM):")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO tasks (task_id, task_description, date, time)
+        VALUES (?, ?, ?, ?)
+        ''', (task_id, task_description, date, time))
+        conn.commit()
+        conn.close()
+        print("Task added successfully.")
+    except Exception as e:
+        print("An error occurred while adding task:", str(e))
 
 def remove_task():
-    id = input("Enter Task ID to remove: ")
-   
+    task_id = input("Enter Task ID to remove:")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        DELETE FROM tasks WHERE task_id = ?
+        ''', (task_id,))
+        conn.commit()
+        conn.close()
+        print("Task removed successfully.")
+    except Exception as e:
+        print("An error occurred while removing task:", str(e))
+
 def view_tasks():
-    print("To-Do List:")
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM tasks
+        ''')
+        tasks = cursor.fetchall()
+        conn.close()
+
+        print("To-Do List:")
+        for task in tasks:
+            print(task)
+    except Exception as e:
+        print("An error occurred while fetching tasks:", str(e))

@@ -1,4 +1,6 @@
 import main
+from db_helper import connect_db
+
 def employees():
     user_input = input("""--------------------------------
     1. Add employee
@@ -9,46 +11,85 @@ def employees():
     Enter choice (Number):""")
     
     if user_input == "1":
-        print("Adding employee")
-        # add_employee()
+        add_employee()
     elif user_input == "2":
-        print("Removing employee")
-        # remove_employee()
+        remove_employee()
     elif user_input == "3":
-        print("Updating employee's data")
-        # update_employee_data()
+        update_employee_data()
     elif user_input == "4":
-        print("Viewing List of employees")
-        # view_employees()
+        view_employees()
     elif user_input == "5":
-        print("Getting back to menu...")
         main.main()
     else:
         print("Invalid choice. Please try again.")
 
 def add_employee():
     name = input("Name:")
-    f_name = input("Father Name:")
+    f_name = input("Father's Name:")
     phone_no = input("Phone Number:")
-    cnic_no = input("Cnic Number:")
+    cnic_no = input("CNIC Number:")
     address = input("Address:")
     district = input("District:")
-    print("Added Successfully")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO employees (name, father_name, phone_no, cnic_no, address, district)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ''', (name, f_name, phone_no, cnic_no, address, district))
+        conn.commit()
+        conn.close()
+        print("Employee added successfully.")
+    except Exception as e:
+        print("An error occurred while adding employee:", str(e))
 
 def update_employee_data():
-    name = input("Enter Employee Name:")
-    data = input("Update What 1.Name:\n2.Phone Number\n3.Father Name:\n4.Cnic Number\n5.Address\n6.District")
-    print("Updated Successfully")
+    employee_id = input("Enter Employee ID:")
+    column = input("Update Which Field (name, father_name, phone_no, cnic_no, address, district):")
+    new_value = input(f"Enter New Value for {column}:")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(f'''
+        UPDATE employees
+        SET {column} = ?
+        WHERE id = ?
+        ''', (new_value, employee_id))
+        conn.commit()
+        conn.close()
+        print("Employee data updated successfully.")
+    except Exception as e:
+        print("An error occurred while updating employee data:", str(e))
+
 def remove_employee():
-    name = input("Enter Employee Name:")
-    print("Removed Successfully")
+    employee_id = input("Enter Employee ID to remove:")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        DELETE FROM employees WHERE id = ?
+        ''', (employee_id,))
+        conn.commit()
+        conn.close()
+        print("Employee removed successfully.")
+    except Exception as e:
+        print("An error occurred while removing employee:", str(e))
+
 def view_employees():
-    print("List of Employees")
-    # fetch_employees()
-def back_to_menu():
-    print("Getting back to menu...")
-    main()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM employees
+        ''')
+        employees = cursor.fetchall()
+        conn.close()
 
-
-
-
+        print("List of Employees:")
+        for employee in employees:
+            print(employee)
+    except Exception as e:
+        print("An error occurred while fetching employees:", str(e))

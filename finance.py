@@ -1,83 +1,194 @@
-
 import main
+from db_helper import connect_db
+
 def finance():
     user_input = input("""--------------------------------
-    1. Add Fee
-    2. Add Employee Salary
-    3. Add Expenditures
-    4. Paid students
-    5. Unpaid students
-    6. Paid employees
-    7. Unpaid employees
-    8. Monthly Report
-    9. Yearly Report                  
-    10. Back to Main Menu
+    1. Pay Fees
+    2. Pay Salary
+    3. Expenditures
+    4. Paid Employees
+    5. Unpaid Employees
+    6. Monthly Report
+    7. Yearly Report
+    8. Back to Menu
     Enter choice (Number):""")
-
+    
     if user_input == "1":
-        print("Adding Fee")
-        # add_fee()
+        pay_fees()
     elif user_input == "2":
-        print("Adding Employee Salary")
-        # add_employee_salary()
+        pay_salary()
     elif user_input == "3":
-        print("Adding Expenditures")
-        # add_expenditure()
+        expenditures()
     elif user_input == "4":
-        print("Paid students")
-        # paid_students()
+        paid_employees()
     elif user_input == "5":
-        print("Unpaid students")
-        # unpaid_students()
+        unpaid_employees()
     elif user_input == "6":
-        print("Paid employees")
-        # paid_employees()
+        monthly_report()
     elif user_input == "7":
-        print("Unpaid employees")
-        # unpaid_employees()
+        yearly_report()
     elif user_input == "8":
-        print("Monthly Report")
-        # monthly_report()
-    elif user_input == "9":
-        print("Yearly Report")
-        # yearly_report()
-    elif user_input == "10":
-        print("Getting back to main menu")
+        main.main()
+    else:
+        print("Invalid choice. Please try again.")
 
-def add_fee():
-    print("Enter fee details here")
-    # add_fee_details()
+def pay_fees():
+    student_id = input("Enter Student ID:")
+    amount = input("Enter Amount:")
+    date = input("Enter Date (YYYY-MM-DD):")
 
-def add_employee_salary():
-    print("Enter employee salary details here")
-    # add_employee_salary_details()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO fees (student_id, amount, date, paid)
+        VALUES (?, ?, ?, 1)
+        ''', (student_id, amount, date))
+        conn.commit()
+        conn.close()
+        print("Fees paid successfully.")
+    except Exception as e:
+        print("An error occurred while paying fees:", str(e))
 
+def pay_salary():
+    employee_id = input("Enter Employee ID:")
+    amount = input("Enter Amount:")
+    date = input("Enter Date (YYYY-MM-DD):")
 
-def paid_students():
-    print("Enter paid student details here")
-    # paid_student_details()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO salaries (employee_id, amount, date, paid)
+        VALUES (?, ?, ?, 1)
+        ''', (employee_id, amount, date))
+        conn.commit()
+        conn.close()
+        print("Salary paid successfully.")
+    except Exception as e:
+        print("An error occurred while paying salary:", str(e))
 
-def unpaid_students():
-    print("Enter unpaid student details here")
-    # unpaid_student_details()
+def expenditures():
+    category = input("Enter Expenditure Category:")
+    amount = input("Enter Amount:")
+    date = input("Enter Date (YYYY-MM-DD):")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        INSERT INTO expenditures (category, amount, date)
+        VALUES (?, ?, ?)
+        ''', (category, amount, date))
+        conn.commit()
+        conn.close()
+        print("Expenditure added successfully.")
+    except Exception as e:
+        print("An error occurred while adding expenditure:", str(e))
 
 def paid_employees():
-    print("Enter paid employee details here")
-    # paid_employee_details()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM salaries WHERE paid = 1
+        ''')
+        paid_employees = cursor.fetchall()
+        conn.close()
+
+        print("Paid Employees:")
+        for employee in paid_employees:
+            print(employee)
+    except Exception as e:
+        print("An error occurred while fetching paid employees:", str(e))
 
 def unpaid_employees():
-    print("Enter unpaid employee details here")
-    # unpaid_employee_details()
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM salaries WHERE paid = 0
+        ''')
+        unpaid_employees = cursor.fetchall()
+        conn.close()
+
+        print("Unpaid Employees:")
+        for employee in unpaid_employees:
+            print(employee)
+    except Exception as e:
+        print("An error occurred while fetching unpaid employees:", str(e))
 
 def monthly_report():
-    print("Generating monthly report here")
-    # generate_monthly_report()
+    month = input("Enter Month (MM):")
+    year = input("Enter Year (YYYY):")
+
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM expenditures WHERE strftime('%m', date) = ? AND strftime('%Y', date) = ?
+        ''', (month, year))
+        expenditures = cursor.fetchall()
+        cursor.execute('''
+        SELECT * FROM fees WHERE strftime('%m', date) = ? AND strftime('%Y', date) = ?
+        ''', (month, year))
+        fees = cursor.fetchall()
+        cursor.execute('''
+        SELECT * FROM salaries WHERE strftime('%m', date) = ? AND strftime('%Y', date) = ?
+        ''', (month, year))
+        salaries = cursor.fetchall()
+        conn.close()
+
+        print("Monthly Report:")
+        print("Expenditures:", expenditures)
+        print("Fees:", fees)
+        print("Salaries:", salaries)
+    except Exception as e:
+        print("An error occurred while generating the monthly report:", str(e))
 
 def yearly_report():
-    print("Generating yearly report here")
-    # generate_yearly_report()
+    year = input("Enter Year (YYYY):")
 
-def add_expenditure():
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute('''
+        SELECT * FROM expenditures WHERE strftime('%Y', date) = ?
+        ''', (year,))
+        expenditures = cursor.fetchall()
+        cursor.execute('''
+        SELECT * FROM fees WHERE strftime('%Y', date) = ?
+        ''', (year,))
+        fees = cursor.fetchall()
+        cursor.execute('''
+        SELECT * FROM salaries WHERE strftime('%Y', date) = ?
+        ''', (year,))
+        salaries = cursor.fetchall()
+        conn.close()
+
+        print("Yearly Report:")
+        print("Expenditures:", expenditures)
+        print("Fees:", fees)
+        print("Salaries:", salaries)
+    except Exception as e:
+        print("An error occurred while generating the yearly report:", str(e))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # generate_yearly_report()
+
+#def add_expenditure():
     user_input = input("""
     1. All
     2. Single Item
@@ -96,7 +207,7 @@ def add_expenditure():
     else:
         print("Invalid choice. Please try again.")
 
-def add_all_expenditures():
+#def add_all_expenditures():
     print("Enter Amounts one by one:")
     meal = int(input("Meal(breaf fast,Lunch,Dinner etc):"))
     gas_bill = int(input("Gas Bill:"))
@@ -112,7 +223,7 @@ def add_all_expenditures():
     print("Total Expenditure:", total_expenditure)
 
 
-def add_single_expenditure():
+#def add_single_expenditure():
     user_input = input("""
     1. Meal Expenditures 
     2. Gas Bill

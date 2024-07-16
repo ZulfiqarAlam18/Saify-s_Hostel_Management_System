@@ -38,7 +38,7 @@ def main():
                 print("Exiting the system. Goodbye!")
                 break
             else:
-                print("Invalid choice. Please enter a number between 1 to 8.")
+                print("Invalid choice. Please enter a number between 1 to 7.")
         except Exception as e:
             print("An error occurred:", str(e))
             continue
