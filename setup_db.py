@@ -1,7 +1,7 @@
 import sqlite3
 
 def create_tables():
-    conn = sqlite3.connect('data/hostel_management.db')
+    conn = sqlite3.connect('database/hostel_management.db')
     cursor = conn.cursor()
 
     cursor.execute('''
